@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Dynamic All-Pairs Shortest Path Explorer</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+<style>
+  .graph-container {
+    /* This container now only holds the initial graph */
+    display: block;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .final-graph-container {
+    /* Container for the final shortest paths graph */
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    padding: 10px;
+    display: none; /* Hidden until computed */
+    margin-bottom: 20px;
+  }
+
+  #canvas-container {
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #f9f9f9;
+    padding: 10px;
+    display: inline-block;
+  }
+
+  #adjacencyMatrix, #distanceMatrix, #pathMatrix {
+    border-collapse: collapse;
+    margin-top: 10px;
+  }
+
+  #adjacencyMatrix th, #adjacencyMatrix td,
+  #distanceMatrix th, #distanceMatrix td,
+  #pathMatrix th, #pathMatrix td {
+    border: 1px solid #ccc;
+    padding: 5px;
+    text-align: center;
+    min-width: 30px;
+  }
+
+  .results-container {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+  }
+
+  .matrix-panel {
+    display: inline-block;
+    vertical-align: top;
+  }
+
+  .container {
+    position: relative;
+  }
+
+  .query-panel {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: #ffffffcc;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  }
+
+</style>
+</head>
+<body>
+  <h1>Dynamic All-Pairs Shortest Path Explorer</h1>
+  <div class="container">
+    <div class="control-panel">
+      <label for="numNodes">Number of Vertices:</label>
+      <input type="number" id="numNodes" min="1" max="26" value="4" />
+      <button id="createNodesBtn">Create Nodes</button>
+      <button id="refreshBtn">Refresh</button>
+      <p>Drag from one node to another to create a directed edge. A prompt will ask for the weight.</p>
+
+      <div class="graph-container">
+        <div id="canvas-container">
+          <canvas id="graphCanvas" width="800" height="600"></canvas>
+        </div>
+      </div>
+
+      <!-- Final Graph Container placed below initial graph -->
+      <div class="final-graph-container" id="canvas-container-final">
+        <h3>Shortest Paths Graph</h3>
+        <canvas id="finalGraphCanvas" width="800" height="600"></canvas>
+      </div>
+
+      <button id="computeBtn">Compute Shortest Paths</button>
+      
+      <div class="update-panel">
+        <h3>Dynamic Updates</h3>
+        <div>
+          <label for="removeNodeInput">Node to remove:</label>
+          <input type="text" id="removeNodeInput" placeholder="e.g. C" maxlength="1"/>
+          <button id="removeNodeBtn">Remove Node</button>
+        </div>
+        <div>
+          <label for="addNodeLabel">Add Node:</label>
+          <input type="text" id="addNodeLabel" placeholder="A" maxlength="1" />
+          <button id="addNodeBtn">Add Node</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="query-panel">
+      <h2>Query Shortest Path</h2>
+      <label for="startNode">From:</label>
+      <input type="text" id="startNode" value="A" maxlength="1" />
+      <label for="endNode">To:</label>
+      <input type="text" id="endNode" value="C" maxlength="1" />
+      <button id="queryBtn">Query</button>
+      <div id="queryResult"></div>
+    </div>
+
+    <div class="warnings-panel">
+      <div id="negativeEdgeWarning" style="display:none; color:red; font-weight:bold;">
+        Warning: Negative edge(s) present. Be cautious!
+      </div>
+      <div id="negativeCycleWarning" style="display:none; color:red; font-weight:bold;">
+        Warning: Negative cycle detected!
+      </div>
+    </div>
+
+    <div class="results-container">
+      <div class="matrix-panel">
+        <h2>Current Graph Adjacency Matrix:</h2>
+        <table id="adjacencyMatrix"></table>
+
+        <h2>Shortest Path Distance Matrix:</h2>
+        <table id="distanceMatrix"></table>
+      </div>
+
+      <div class="matrix-panel">
+        <h2>Path Reconstruction Table:</h2>
+        <table id="pathMatrix"></table>
+      </div>
+    </div>
+  </div>
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

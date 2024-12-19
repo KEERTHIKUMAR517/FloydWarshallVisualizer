@@ -1,0 +1,29 @@
+# Web Framework
+flask==3.0.0
+werkzeug==3.0.1
+
+# Data Processing
+numpy==1.24.3
+pandas==2.1.4
+networkx==3.2.1
+
+# Visualization
+matplotlib
+
+# Development Tools
+black==23.12.1
+flake8==7.0.0
+ipykernel
+
+# Type Checking
+mypy==1.8.0
+
+# Documentation
+sphinx==7.2.6
+
+# Web Interface
+flask-wtf==1.2.1
+wtforms==3.1.1
+
+# Security
+python-dotenv==1.0.0 
